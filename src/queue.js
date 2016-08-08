@@ -1,4 +1,6 @@
 
+var _ = require('underscore');
+
 var log = require('./log');
 var Logger = log.loggerWithName('OperationQueue');
 
@@ -49,6 +51,11 @@ function OperationQueue() {
 
 OperationQueue.prototype._nextOperations = function () {
     var self = this;
+    
+    if(self._queuedOperations.length == 0){
+        self.stop();        
+    }
+    
     while ((self._runningOperations.length < self.maxConcurrentOperations) && self._queuedOperations.length) {
         var op = self._queuedOperations[0];
         self._queuedOperations.splice(0, 1);
